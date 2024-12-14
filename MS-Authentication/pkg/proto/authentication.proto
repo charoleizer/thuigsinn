@@ -4,8 +4,8 @@ package authentication;
 
 option go_package = "/authentication";
 
-service Users {
-  rpc Register(RegisterRequest) returns (RegisterResponse) {}
+service Authentication {
+  rpc Register(RegisterRequest) returns (stream RegisterResponse) {}
   rpc Login(LoginRequest) returns (LoginResponse) {}
   rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {}
   rpc Logout(LogoutRequest) returns (LogoutResponse) {}
@@ -19,7 +19,15 @@ message RegisterRequest {
 }
 
 message RegisterResponse {
-  string message = 1;
+  Status status = 1;
+}
+
+enum Status {
+  Unknown = 0;
+  Received = 1;
+  Processing = 2;
+  Completed = 3;
+  Failed = 4;
 }
 
 message LoginRequest {
