@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package users;
 
-option go_package = "/users";
+option go_package = "github.com/charoleizer/thuigsinn/ms-users";
 
 service Users {
   rpc Create (CreateRequest) returns (CreateResponse);

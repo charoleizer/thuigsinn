@@ -1,4 +1,4 @@
-module users
+module github.com/charoleizer/thuigsinn/ms-users
 
 go 1.22.8
 
