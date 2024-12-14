@@ -13,4 +13,6 @@ type UsersRepository interface {
 	Read(ctx context.Context, id primitive.ObjectID) (*users.ReadResponse, error)
 	Update(ctx context.Context, id primitive.ObjectID, users dtos.ExtendedUpdateRequest) error
 	Delete(ctx context.Context, id primitive.ObjectID) error
+
+	SetStatus(ctx context.Context, id primitive.ObjectID, status users.Status) error
 }

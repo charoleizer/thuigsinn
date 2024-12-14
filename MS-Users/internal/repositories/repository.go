@@ -44,12 +44,13 @@ func (u *usersRepository) _isUsernameAlreadyExists(model models.User) (bool, err
 	return count > 0, nil
 }
 
-func (u *usersRepository) Create(ctx context.Context, users dtos.ExtendedCreateRequest) (primitive.ObjectID, error) {
+func (u *usersRepository) Create(ctx context.Context, req dtos.ExtendedCreateRequest) (primitive.ObjectID, error) {
 	model := models.User{
 		ID:       primitive.NewObjectID(),
-		Username: users.Username,
-		Email:    users.Email,
-		Password: users.Password,
+		Username: req.Username,
+		Email:    req.Email,
+		Password: req.Password,
+		Status:   users.Status_Processing,
 	}
 
 	exists, err := u._isEmailAlreadyExists(model)
@@ -147,6 +148,25 @@ func (u *usersRepository) Delete(ctx context.Context, id primitive.ObjectID) err
 			return errdefs.ErrUserNotFound
 		}
 		return errdefs.ErrDatabaseDeleteOne(err.Error())
+	}
+
+	return nil
+}
+
+func (u *usersRepository) SetStatus(ctx context.Context, id primitive.ObjectID, status users.Status) error {
+	var model *models.User
+
+	collection := u.db.Collection(model.TableName())
+
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{"status": status}}
+
+	_, err := collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return errdefs.ErrUserNotFound
+		}
+		return errdefs.ErrDatabaseUpdateOne(err.Error())
 	}
 
 	return nil

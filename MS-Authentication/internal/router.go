@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/charoleizer/thuigsinn/ms-authentication/internal/handlers"
@@ -37,6 +38,7 @@ func (s *server) Register(req *authentication.RegisterRequest, stream authentica
 	for {
 		select {
 		case response := <-responseChan:
+			fmt.Println(response.Status)
 			if err := stream.Send(response); err != nil {
 				return err
 			}

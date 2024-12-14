@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package authentication;
+
+option go_package = "/authentication";
+
+service Authentication {
+  rpc Register(RegisterRequest) returns (stream RegisterResponse) {}
+  rpc Login(LoginRequest) returns (LoginResponse) {}
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {}
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {}
+}
+
+message RegisterRequest {
+  string userid = 1;
+  string username = 2;
+  string email = 3;
+  string password = 4;
+}
+
+message RegisterResponse {
+  Status status = 1;
+}
+
+enum Status {
+  Unknown = 0;
+  Received = 1;
+  Processing = 2;
+  Completed = 3;
+  Failed = 4;
+}
+
+message LoginRequest {
+  oneof login_identifier {
+    string username = 1;
+    string email = 2;
+  }
+  string password = 3;
+}
+
+message LoginResponse {
+  string message = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1;
+}
+
+message RefreshTokenResponse {
+  string message = 1;
+  string access_token = 2;
+}
+
+message LogoutRequest {
+  string refresh_token = 1;
+}
+
+message LogoutResponse {
+  string message = 1;
+}
+
+
+

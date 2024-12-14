@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"time"
 
 	"github.com/charoleizer/thuigsinn/ms-authentication/internal/errdefs"
 	"github.com/charoleizer/thuigsinn/ms-authentication/internal/models"
@@ -34,7 +35,7 @@ func (u *usersRepository) Create(ctx context.Context, users *authentication.Regi
 	collection := u.db.Collection(model.TableName())
 
 	// Simulate a lazy database
-	// time.Sleep(3 * time.Second)
+	time.Sleep(3 * time.Second)
 
 	_, err = collection.InsertOne(ctx, model)
 	if err != nil {

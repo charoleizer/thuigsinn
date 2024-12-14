@@ -20,6 +20,61 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type Status int32
+
+const (
+	Status_Unknown    Status = 0
+	Status_Received   Status = 1
+	Status_Processing Status = 2
+	Status_Completed  Status = 3
+	Status_Failed     Status = 4
+)
+
+// Enum value maps for Status.
+var (
+	Status_name = map[int32]string{
+		0: "Unknown",
+		1: "Received",
+		2: "Processing",
+		3: "Completed",
+		4: "Failed",
+	}
+	Status_value = map[string]int32{
+		"Unknown":    0,
+		"Received":   1,
+		"Processing": 2,
+		"Completed":  3,
+		"Failed":     4,
+	}
+)
+
+func (x Status) Enum() *Status {
+	p := new(Status)
+	*p = x
+	return p
+}
+
+func (x Status) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Status) Descriptor() protoreflect.EnumDescriptor {
+	return file_users_proto_enumTypes[0].Descriptor()
+}
+
+func (Status) Type() protoreflect.EnumType {
+	return &file_users_proto_enumTypes[0]
+}
+
+func (x Status) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Status.Descriptor instead.
+func (Status) EnumDescriptor() ([]byte, []int) {
+	return file_users_proto_rawDescGZIP(), []int{0}
+}
+
 type CreateRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -465,7 +520,12 @@ var file_users_proto_rawDesc = []byte{
 	0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02,
 	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x20, 0x0a, 0x0e,
 	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e,
-	0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x32, 0xdd,
+	0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x2a, 0x4e,
+	0x0a, 0x06, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x6e, 0x6b, 0x6e,
+	0x6f, 0x77, 0x6e, 0x10, 0x00, 0x12, 0x0c, 0x0a, 0x08, 0x52, 0x65, 0x63, 0x65, 0x69, 0x76, 0x65,
+	0x64, 0x10, 0x01, 0x12, 0x0e, 0x0a, 0x0a, 0x50, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x69, 0x6e,
+	0x67, 0x10, 0x02, 0x12, 0x0d, 0x0a, 0x09, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x65, 0x64,
+	0x10, 0x03, 0x12, 0x0a, 0x0a, 0x06, 0x46, 0x61, 0x69, 0x6c, 0x65, 0x64, 0x10, 0x04, 0x32, 0xdd,
 	0x01, 0x0a, 0x05, 0x55, 0x73, 0x65, 0x72, 0x73, 0x12, 0x35, 0x0a, 0x06, 0x43, 0x72, 0x65, 0x61,
 	0x74, 0x65, 0x12, 0x14, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74,
 	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x15, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x73,
@@ -495,26 +555,28 @@ func file_users_proto_rawDescGZIP() []byte {
 	return file_users_proto_rawDescData
 }
 
+var file_users_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_users_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_users_proto_goTypes = []interface{}{
-	(*CreateRequest)(nil),  // 0: users.CreateRequest
-	(*CreateResponse)(nil), // 1: users.CreateResponse
-	(*ReadRequest)(nil),    // 2: users.ReadRequest
-	(*ReadResponse)(nil),   // 3: users.ReadResponse
-	(*UpdateRequest)(nil),  // 4: users.UpdateRequest
-	(*UpdateResponse)(nil), // 5: users.UpdateResponse
-	(*DeleteRequest)(nil),  // 6: users.DeleteRequest
-	(*DeleteResponse)(nil), // 7: users.DeleteResponse
+	(Status)(0),            // 0: users.Status
+	(*CreateRequest)(nil),  // 1: users.CreateRequest
+	(*CreateResponse)(nil), // 2: users.CreateResponse
+	(*ReadRequest)(nil),    // 3: users.ReadRequest
+	(*ReadResponse)(nil),   // 4: users.ReadResponse
+	(*UpdateRequest)(nil),  // 5: users.UpdateRequest
+	(*UpdateResponse)(nil), // 6: users.UpdateResponse
+	(*DeleteRequest)(nil),  // 7: users.DeleteRequest
+	(*DeleteResponse)(nil), // 8: users.DeleteResponse
 }
 var file_users_proto_depIdxs = []int32{
-	0, // 0: users.Users.Create:input_type -> users.CreateRequest
-	2, // 1: users.Users.Read:input_type -> users.ReadRequest
-	4, // 2: users.Users.Update:input_type -> users.UpdateRequest
-	6, // 3: users.Users.Delete:input_type -> users.DeleteRequest
-	1, // 4: users.Users.Create:output_type -> users.CreateResponse
-	3, // 5: users.Users.Read:output_type -> users.ReadResponse
-	5, // 6: users.Users.Update:output_type -> users.UpdateResponse
-	7, // 7: users.Users.Delete:output_type -> users.DeleteResponse
+	1, // 0: users.Users.Create:input_type -> users.CreateRequest
+	3, // 1: users.Users.Read:input_type -> users.ReadRequest
+	5, // 2: users.Users.Update:input_type -> users.UpdateRequest
+	7, // 3: users.Users.Delete:input_type -> users.DeleteRequest
+	2, // 4: users.Users.Create:output_type -> users.CreateResponse
+	4, // 5: users.Users.Read:output_type -> users.ReadResponse
+	6, // 6: users.Users.Update:output_type -> users.UpdateResponse
+	8, // 7: users.Users.Delete:output_type -> users.DeleteResponse
 	4, // [4:8] is the sub-list for method output_type
 	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -630,13 +692,14 @@ func file_users_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_users_proto_rawDesc,
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_users_proto_goTypes,
 		DependencyIndexes: file_users_proto_depIdxs,
+		EnumInfos:         file_users_proto_enumTypes,
 		MessageInfos:      file_users_proto_msgTypes,
 	}.Build()
 	File_users_proto = out.File

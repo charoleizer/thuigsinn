@@ -6,6 +6,8 @@ import (
 
 	"github.com/charoleizer/thuigsinn/ms-users/internal/dtos"
 	"github.com/charoleizer/thuigsinn/ms-users/internal/repositories"
+	"github.com/charoleizer/thuigsinn/ms-users/internal/services"
+	"github.com/charoleizer/thuigsinn/ms-users/pkg/proto/authentication"
 	"github.com/charoleizer/thuigsinn/ms-users/pkg/proto/users"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -43,6 +45,29 @@ func (h *Handlers) Create(ctx context.Context, req *users.CreateRequest) (*users
 	if err != nil {
 		return nil, err
 	}
+
+	go func(id primitive.ObjectID, req *dtos.ExtendedCreateRequest) {
+		authenticationClient, err := services.NewAuthenticationClient(ctx, "localhost:8081")
+		if err != nil {
+			usersRepository.SetStatus(context.Background(), id, users.Status_Failed)
+			return
+		}
+		defer authenticationClient.AuthenticationClose()
+
+		err = authenticationClient.AuthenticationRegister(context.Background(), &authentication.RegisterRequest{
+			Userid:   id.Hex(),
+			Email:    req.Email,
+			Username: req.Username,
+			Password: req.Password,
+		})
+		if err != nil {
+			usersRepository.SetStatus(context.Background(), id, users.Status_Failed)
+			return
+		}
+
+		usersRepository.SetStatus(context.Background(), id, users.Status_Completed)
+
+	}(insertedID, extendedReq)
 
 	return &users.CreateResponse{
 		Id: insertedID.Hex(),
