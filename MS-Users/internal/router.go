@@ -2,9 +2,9 @@ package internal
 
 import (
 	"context"
-	"users/cmd/users"
-	"users/internal/handlers"
 
+	"github.com/charoleizer/thuigsinn/ms-users/internal/handlers"
+	"github.com/charoleizer/thuigsinn/ms-users/pkg/proto/users"
 	"google.golang.org/grpc"
 )
 

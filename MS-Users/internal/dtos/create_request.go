@@ -1,9 +1,9 @@
 package dtos
 
 import (
-	"users/cmd/users"
-	"users/internal/errdefs"
-	"users/pkg"
+	"github.com/charoleizer/thuigsinn/ms-users/internal/errdefs"
+	"github.com/charoleizer/thuigsinn/ms-users/pkg/proto/users"
+	"github.com/charoleizer/thuigsinn/ms-users/pkg/utils"
 )
 
 type ExtendedCreateRequest struct {
@@ -27,15 +27,15 @@ func (req *ExtendedCreateRequest) Validate() error {
 		return errdefs.ErrPasswordRequired
 	}
 
-	if err := pkg.IsValidUsername(req.Username); err != nil {
+	if err := utils.IsValidUsername(req.Username); err != nil {
 		return errdefs.ErrInvalidUsername(err.Error())
 	}
 
-	if err := pkg.IsValidEmail(req.Email); err != nil {
+	if err := utils.IsValidEmail(req.Email); err != nil {
 		return errdefs.ErrInvalidEmail(err.Error())
 	}
 
-	if err := pkg.IsValidPassword(req.Password); err != nil {
+	if err := utils.IsValidPassword(req.Password); err != nil {
 		return errdefs.ErrInvalidPassword(err.Error())
 	}
 
@@ -43,7 +43,7 @@ func (req *ExtendedCreateRequest) Validate() error {
 }
 
 func (req *ExtendedCreateRequest) HashPassword() error {
-	hashedPassword, err := pkg.HashPassword(req.Password, PasswordSalt)
+	hashedPassword, err := utils.HashPassword(req.Password, PasswordSalt)
 	if err != nil {
 		return errdefs.ErrHashPassword(err.Error())
 	}

@@ -1,8 +1,6 @@
 package main
 
-import (
-	"users/internal"
-)
+import "github.com/charoleizer/thuigsinn/ms-users/internal"
 
 func main() {
 	db, err := internal.ConnectToDatabase()

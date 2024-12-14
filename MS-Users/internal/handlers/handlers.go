@@ -3,10 +3,10 @@ package handlers
 import (
 	"context"
 	"time"
-	"users/cmd/users"
-	"users/internal/dtos"
-	"users/internal/repositories"
 
+	"github.com/charoleizer/thuigsinn/ms-users/internal/dtos"
+	"github.com/charoleizer/thuigsinn/ms-users/internal/repositories"
+	"github.com/charoleizer/thuigsinn/ms-users/pkg/proto/users"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )

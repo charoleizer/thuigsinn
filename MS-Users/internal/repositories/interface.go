@@ -2,9 +2,9 @@ package repositories
 
 import (
 	"context"
-	"users/cmd/users"
-	"users/internal/dtos"
 
+	"github.com/charoleizer/thuigsinn/ms-users/internal/dtos"
+	"github.com/charoleizer/thuigsinn/ms-users/pkg/proto/users"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

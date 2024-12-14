@@ -1,9 +1,9 @@
 package dtos
 
 import (
-	"users/cmd/users"
-	"users/internal/errdefs"
-	"users/pkg"
+	"github.com/charoleizer/thuigsinn/ms-users/internal/errdefs"
+	"github.com/charoleizer/thuigsinn/ms-users/pkg/proto/users"
+	"github.com/charoleizer/thuigsinn/ms-users/pkg/utils"
 )
 
 type ExtendedUpdateRequest struct {
@@ -12,14 +12,14 @@ type ExtendedUpdateRequest struct {
 
 func (req *ExtendedUpdateRequest) Validate() error {
 	if req.Username != "" {
-		err := pkg.IsValidUsername(req.Username)
+		err := utils.IsValidUsername(req.Username)
 		if err != nil {
 			return errdefs.ErrInvalidUsername(err.Error())
 		}
 	}
 
 	if req.Email != "" {
-		err := pkg.IsValidEmail(req.Email)
+		err := utils.IsValidEmail(req.Email)
 		if err != nil {
 			return errdefs.ErrInvalidEmail(err.Error())
 		}

@@ -3,8 +3,8 @@ package internal
 import (
 	"log"
 	"net"
-	"users/internal/handlers"
 
+	"github.com/charoleizer/thuigsinn/ms-users/internal/handlers"
 	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
