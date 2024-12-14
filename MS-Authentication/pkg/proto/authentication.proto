@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package authentication;
 
-option go_package = "github.com/charoleizer/thuigsinn/ms-authentication";
+option go_package = "/authentication";
 
 service Users {
   rpc Register(RegisterRequest) returns (RegisterResponse) {}
