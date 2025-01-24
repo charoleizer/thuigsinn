@@ -2,13 +2,15 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/charoleizer/thuigsinn/ms-users/internal/dtos"
 	"github.com/charoleizer/thuigsinn/ms-users/internal/repositories"
-	"github.com/charoleizer/thuigsinn/ms-users/internal/services"
+	"github.com/charoleizer/thuigsinn/ms-users/pkg/brokers"
 	"github.com/charoleizer/thuigsinn/ms-users/pkg/proto/authentication"
 	"github.com/charoleizer/thuigsinn/ms-users/pkg/proto/users"
+	"github.com/nats-io/nats.go"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -18,12 +20,14 @@ const (
 )
 
 type Handlers struct {
-	db *mongo.Database
+	broker nats.JetStreamContext
+	db     *mongo.Database
 }
 
-func NewHandlers(db *mongo.Database) *Handlers {
+func NewHandlers(broker nats.JetStreamContext, db *mongo.Database) *Handlers {
 	return &Handlers{
-		db: db,
+		broker: broker,
+		db:     db,
 	}
 }
 
@@ -46,28 +50,46 @@ func (h *Handlers) Create(ctx context.Context, req *users.CreateRequest) (*users
 		return nil, err
 	}
 
-	go func(id primitive.ObjectID, req *dtos.ExtendedCreateRequest) {
-		authenticationClient, err := services.NewAuthenticationClient(ctx, "localhost:8081")
-		if err != nil {
-			usersRepository.SetStatus(context.Background(), id, users.Status_Failed)
-			return
-		}
-		defer authenticationClient.AuthenticationClose()
+	registerRequest := &authentication.RegisterRequest{
+		Userid:   insertedID.Hex(),
+		Email:    extendedReq.Email,
+		Username: extendedReq.Username,
+		Password: extendedReq.Password,
+	}
 
-		err = authenticationClient.AuthenticationRegister(context.Background(), &authentication.RegisterRequest{
-			Userid:   id.Hex(),
-			Email:    req.Email,
-			Username: req.Username,
-			Password: req.Password,
-		})
-		if err != nil {
-			usersRepository.SetStatus(context.Background(), id, users.Status_Failed)
-			return
-		}
+	registerRequestJSON, err := json.Marshal(registerRequest)
+	if err != nil {
+		return nil, err
+	}
 
-		usersRepository.SetStatus(context.Background(), id, users.Status_Completed)
+	natsJSConn := brokers.NewNats(h.broker)
+	err = natsJSConn.Publish("users.created", registerRequestJSON)
+	if err != nil {
+		return nil, err
+	}
 
-	}(insertedID, extendedReq)
+	// go func(id primitive.ObjectID, req *dtos.ExtendedCreateRequest) {
+	// 	authenticationClient, err := services.NewAuthenticationClient(ctx, "localhost:8081")
+	// 	if err != nil {
+	// 		usersRepository.SetStatus(context.Background(), id, users.Status_Failed)
+	// 		return
+	// 	}
+	// 	defer authenticationClient.AuthenticationClose()
+
+	// 	err = authenticationClient.AuthenticationRegister(context.Background(), &authentication.RegisterRequest{
+	// 		Userid:   id.Hex(),
+	// 		Email:    req.Email,
+	// 		Username: req.Username,
+	// 		Password: req.Password,
+	// 	})
+	// 	if err != nil {
+	// 		usersRepository.SetStatus(context.Background(), id, users.Status_Failed)
+	// 		return
+	// 	}
+
+	// 	usersRepository.SetStatus(context.Background(), id, users.Status_Completed)
+
+	// }(insertedID, extendedReq)
 
 	return &users.CreateResponse{
 		Id: insertedID.Hex(),

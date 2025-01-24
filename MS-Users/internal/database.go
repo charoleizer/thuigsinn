@@ -25,6 +25,7 @@ func ConnectToDatabase() (*mongo.Database, error) {
 		return nil, err
 	}
 
-	fmt.Println("Connected to MongoDB: ", os.Getenv("MONGO_DATABASE"))
+	fmt.Println("Connected to MongoDB: ", mongoURI)
+	fmt.Println("Database: ", os.Getenv("MONGO_DATABASE"))
 	return client.Database(os.Getenv("MONGO_DATABASE")), nil
 }

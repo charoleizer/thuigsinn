@@ -1,0 +1,49 @@
+usage: nats subscribe [<flags>] [<subject>]
+
+Generic subscription client
+
+Args:
+  [<subject>]  Subject to subscribe to
+
+Flags:
+      --queue=QUEUE              Subscribe to a named queue group
+      --durable=DURABLE          Use a durable consumer (requires JetStream)
+  -r, --raw                      Show the raw data received
+      --translate=TRANSLATE      Translate the message data by running it
+                                 through the given command before output
+      --[no-]ack                 Acknowledge JetStream message that have the
+                                 correct metadata
+      --match-replies            Match replies to requests
+  -i, --inbox                    Subscribes to a generate inbox
+      --count=COUNT              Quit after receiving this many messages
+      --dump=DIRECTORY           Dump received messages to files, 1 file per
+                                 message. Specify - for null terminated STDOUT
+                                 for use with xargs -0
+      --headers-only             Do not render any data, shows only headers
+      --start-sequence=SEQUENCE  Starts at a specific Stream sequence (requires
+                                 JetStream)
+      --all                      Delivers all messages found in the Stream
+                                 (requires JetStream
+      --new                      Delivers only future messages (requires
+                                 JetStream)
+      --last                     Delivers the most recent and all future
+                                 messages (requires JetStream)
+      --since=DURATION           Delivers messages received since a duration
+                                 like 1d3h5m2s(requires JetStream)
+      --last-per-subject         Deliver the most recent messages for each
+                                 subject in the Stream (requires JetStream)
+      --stream=STREAM            Subscribe to a specific stream (required
+                                 JetStream)
+  -I, --ignore-subject=SUBJECT ...  
+                                 Subjects for which corresponding messages
+                                 will be ignored and therefore not shown in the
+                                 output
+      --wait=WAIT                Unsubscribe after this amount of time without
+                                 any traffic
+      --report-subjects          Subscribes to a subject pattern and builds
+                                 a de-duplicated report of active subjects
+                                 receiving data
+      --report-top=10            Number of subjects to show when doing
+                                 'report-subjects'. Default is 10.
+
+Pass --help to see global flags applicable to this command.

@@ -1,0 +1,19 @@
+version: '3'
+services:
+  nats:
+    image: nats:latest
+    container_name: shared-nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command: "-js"
+    environment:
+      - NATS_SERVER_USER=admin
+      - NATS_SERVER_PASSWORD=admin
+    networks:
+      - shared-network
+
+networks:
+  shared-network:
+    name: shared-network
+    driver: bridge
